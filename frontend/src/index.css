@@ -1,0 +1,17 @@
+:root {
+    --primary-family: "Playwrite AU SA", serif;
+    --highlight-color: #ff7e00;
+    --hover-color: #4f4f4f;
+    --bg-color:#F6F6F6;
+    --navbar-color:#212529;
+    --cart-page:#e8e7e7;
+    --secondary-family:"Nunito Sans", serif;
+    /* admin layout */
+    --admin-header-color: #5867dd;
+  }
+
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
