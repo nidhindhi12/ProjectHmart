@@ -8,6 +8,7 @@
     --secondary-family:"Nunito Sans", serif;
     /* admin layout */
     --admin-header-color: #5867dd;
+    --user-info-color:#143D60;
   }
 
   *{
@@ -15,3 +16,4 @@
     margin: 0;
     padding: 0;
   }
+
