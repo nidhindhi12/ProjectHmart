@@ -6,7 +6,8 @@ const { newproduct, readallproduct, updateproduct, deleteproduct } = require('..
 router.post('/', newproduct);
 router.get('/readproduct', readallproduct);
 router.put('/updateproduct/:id', updateproduct);
-
 router.delete('/deleteproduct/:id', deleteproduct);
+
+
 
 module.exports = router;

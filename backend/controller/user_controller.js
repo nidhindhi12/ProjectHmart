@@ -2,7 +2,8 @@ const usermodel = require('../model/usermodel');
 const JWT = require('jsonwebtoken'); //4
 const { JWTSECRET } = require('../utility/config'); //5
 
-const dcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
+const { decrypt } = require('dotenv');
 
 //#region  add 
 
@@ -16,7 +17,7 @@ const newuser = async (req, res) => {
         if (!user) {
             return res.status(400).json({ status: false, data: { message: 'user is null' } });
         }
-        const hashpassword = dcrypt.hashSync(user.password, 10);
+        const hashpassword = bcrypt.hashSync(user.password, 10);
         const dbuser = new usermodel({
             username: user.username, email: user.email, password: hashpassword,
             address: user.address, phonenumber: user.phonenumber, area: user.area, city: user.city, pincode: user.pincode, landmark: user.landmark
@@ -55,9 +56,12 @@ const updatedata = async (req, res) => {
         const id = req.params.id;
 
         const user = req.body;
-        const dbuser = await usermodel.updateOne({ _id: id }, { fullname: user.fullname, email: user.email, password: user.password });
+        const dbuser = await usermodel.updateOne({ _id: id }, {
+            username: user.username, email: user.email,
+            address: user.address, phonenumber: user.phonenumber, area: user.area, city: user.city, pincode: user.pincode, landmark: user.landmark
+        });
 
-        return res.status(200).json({ status: false, data: { message: 'User updated successfully', data: dbuser } });
+        return res.status(200).json({ status: true, data: { message: 'User updated successfully', data: dbuser } });
     } catch (error) {
         return res.status(500).json({ status: false, data: { message: 'internal server error.', data: error } })
     }
@@ -85,12 +89,15 @@ const login = async (req, res) => {
 
     try {
         const userdetail = req.body;
+        console.log(userdetail)
         const dbuser = await usermodel.findOne({ email: userdetail.email }); //6
+        console.log(dbuser);
         if (!dbuser) {
             return res.status(404).json({ status: false, data: { message: 'E-mail not found' } })
         }
 
-        const checkpass = await dcrypt.compare(userdetail.password, dbuser.password,);
+        const checkpass = await bcrypt.compare(userdetail.password, dbuser.password,);
+        console.log(checkpass)
 
 
         if (!checkpass) {
@@ -106,6 +113,39 @@ const login = async (req, res) => {
 
 //#endregion
 
+//#region  updatePassword
+const updatePassword = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const userdetail = req.body;
+
+        const dbuser = await usermodel.findOne({ _id: id });
 
 
-module.exports = { newuser, readalldata, updatedata, deletedata, login }; //7
+        if (!dbuser) {
+            return res.status(404).json({ status: false, data: { message: 'account not found' } })
+        }
+        const checkpass = await bcrypt.compare(userdetail.oldpassword, dbuser.password);
+
+        if (!checkpass) {
+            return res.status(404).json({ status: false, data: { message: 'Incorrect Password' } })
+        }
+        const hashpassword = bcrypt.hashSync(userdetail.newpassword, 10);
+        let updbuser = await usermodel.updateOne({ _id: id }, {
+            password: hashpassword,
+        });
+        return res.status(200).json({ status: true, data: { message: 'Password updated successfully.', data: updbuser } })
+    } catch (error) {
+        return res.status(500).json({ status: false, data: { message: 'internal server error.', data: error } })
+
+    }
+}
+//#endregion
+
+//#region  printverify
+const AuthVerify = async (req, res) => {
+    return res.status(200).json({ status: true, data: { message: 'Authentication verified', data: req.user } })
+}
+//#endregion
+
+module.exports = { newuser, readalldata, updatedata, deletedata, login, updatePassword,AuthVerify }; //

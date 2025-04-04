@@ -12,9 +12,13 @@ const toggleAuth = createSlice({
         loginStatus:(state, actions)=> {
             state.auth = !state.auth;
             state.user = actions.payload;
+        },
+        clearLogout:(state,actions)=>{
+            state.auth=false,
+            state.user={};
         }
     }
 });
 
-export const { loginStatus } = toggleAuth.actions;
+export const { loginStatus ,clearLogout} = toggleAuth.actions;
 export default toggleAuth.reducer

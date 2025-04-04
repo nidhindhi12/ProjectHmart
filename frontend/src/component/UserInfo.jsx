@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col, Container } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
@@ -13,6 +13,7 @@ import { showtoast } from '../store/slice/toastSlice';
 
 const UserInfo = () => {
   const userInfo = useSelector((state) => state.auth.user);
+  const auth =useSelector((state)=>state.auth.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,6 +29,20 @@ const UserInfo = () => {
     pincode: userInfo.pincode || '',
   });
 
+  useEffect(()=>{
+    setUpdateData({
+      id: userInfo?._id || '',
+    username: userInfo?.username || "",
+    email: userInfo?.email || '',
+    address: userInfo?.address || '',
+    phonenumber: userInfo?.phonenumber || '',
+    city: userInfo?.city || '',
+    area: userInfo?.area || '',
+    landmark: userInfo?.landmark || '',
+    pincode: userInfo.pincode || '',
+    })
+  },[userInfo]);
+
   const handleUpdate = (e) => {
     const { name, value } = e.target;
     setUpdateData({ ...updateData, [name]: value });
@@ -38,11 +53,8 @@ const UserInfo = () => {
     try {
 
       const response = await axios.put(`http://localhost:5000/api/updatedata/${updateData.id}`, updateData)
-      dispatch(loginStatus(response.data.data.data))
       dispatch(showtoast({ message: response.data.data.message ,type:"success"}))
-
       navigate('/');
-
     } catch (error) {
       console.log(error);
 
