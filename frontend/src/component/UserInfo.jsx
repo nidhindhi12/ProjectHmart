@@ -11,9 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { showtoast } from '../store/slice/toastSlice';
 
 
+
 const UserInfo = () => {
   const userInfo = useSelector((state) => state.auth.user);
-  const auth =useSelector((state)=>state.auth.auth);
+  
+  const auth = useSelector((state) => state.auth.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,19 +31,19 @@ const UserInfo = () => {
     pincode: userInfo.pincode || '',
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     setUpdateData({
       id: userInfo?._id || '',
-    username: userInfo?.username || "",
-    email: userInfo?.email || '',
-    address: userInfo?.address || '',
-    phonenumber: userInfo?.phonenumber || '',
-    city: userInfo?.city || '',
-    area: userInfo?.area || '',
-    landmark: userInfo?.landmark || '',
-    pincode: userInfo.pincode || '',
+      username: userInfo?.username || "",
+      email: userInfo?.email || '',
+      address: userInfo?.address || '',
+      phonenumber: userInfo?.phonenumber || '',
+      city: userInfo?.city || '',
+      area: userInfo?.area || '',
+      landmark: userInfo?.landmark || '',
+      pincode: userInfo.pincode || '',
     })
-  },[userInfo]);
+  }, [userInfo]);
 
   const handleUpdate = (e) => {
     const { name, value } = e.target;
@@ -53,12 +55,13 @@ const UserInfo = () => {
     try {
 
       const response = await axios.put(`http://localhost:5000/api/updatedata/${updateData.id}`, updateData)
-      dispatch(showtoast({ message: response.data.data.message ,type:"success"}))
+      dispatch(showtoast({ message: response.data.data.message, type: "success" }))
+       
       navigate('/');
     } catch (error) {
       console.log(error);
 
-      
+
     }
   }
 

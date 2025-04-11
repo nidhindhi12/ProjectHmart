@@ -30,10 +30,7 @@ const AdminUser = () => {
                   <Form.Control type="text" placeholder="Enter Full Name" className=' text-black' />
                 </Form.Group>
 
-                {/* <Form.Group as={Col} controlId="formGridPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control type="password" placeholder="Password" />
-              </Form.Group> */}
+               
                 <Form.Group as={Col} controlId="formGridEmail">
                   <Form.Label>Email</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" className=' text-black' />

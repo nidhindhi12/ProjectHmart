@@ -9,16 +9,19 @@ const toggleAuth = createSlice({
     },
 
     reducers: {
-        loginStatus:(state, actions)=> {
+        loginStatus: (state, actions) => {
             state.auth = !state.auth;
-            state.user = actions.payload;
+            state.user = {...actions.payload};
+            // console.log(state.user);
+
         },
-        clearLogout:(state,actions)=>{
-            state.auth=false,
-            state.user={};
+
+        clearLogout: (state, actions) => {
+            state.auth = false,
+                state.user = {};
         }
     }
 });
 
-export const { loginStatus ,clearLogout} = toggleAuth.actions;
+export const { loginStatus, clearLogout } = toggleAuth.actions;
 export default toggleAuth.reducer

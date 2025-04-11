@@ -20,7 +20,7 @@ const newuser = async (req, res) => {
         const hashpassword = bcrypt.hashSync(user.password, 10);
         const dbuser = new usermodel({
             username: user.username, email: user.email, password: hashpassword,
-            address: user.address, phonenumber: user.phonenumber, area: user.area, city: user.city, pincode: user.pincode, landmark: user.landmark
+            address: user.address, phonenumber: user.phonenumber, area: user.area, city: user.city, pincode: user.pincode, landmark: user.landmark, usertype: user.usertype
         });
         await dbuser.save();
 
@@ -148,4 +148,4 @@ const AuthVerify = async (req, res) => {
 }
 //#endregion
 
-module.exports = { newuser, readalldata, updatedata, deletedata, login, updatePassword,AuthVerify }; //
+module.exports = { newuser, readalldata, updatedata, deletedata, login, updatePassword, AuthVerify }; //

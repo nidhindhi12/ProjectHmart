@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Modal from 'react-bootstrap/Modal';
 import username from '../images/username.jpg'
@@ -7,26 +7,29 @@ import { FaEye } from "react-icons/fa";
 import { LuEyeClosed } from "react-icons/lu";
 import axios from 'axios';
 import { loginStatus } from '../store/slice/authSlice';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { togglePassType, toggleShow } from '../store/slice/modalSlice';
-import {showtoast} from '../store/slice/toastSlice'
+import { showtoast } from '../store/slice/toastSlice'
 
 const SignUp_llogin = () => {
   const show = useSelector((state) => state.modalShow.show);
   const passtype = useSelector((state) => state.modalShow.passtype);
-  
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [change, setChange] = useState(false);
- 
   const [addUser, setAddUser] = useState({})
 
   const handleChange = () => {
     setChange(!change);
-    console.log(change);
+
   }
+
+
+
+
   //#region add user
   const handleadduser = async (e) => {
     setAddUser({ ...addUser, [e.target.name]: e.target.value });
@@ -36,7 +39,7 @@ const SignUp_llogin = () => {
     try {
       const response = await axios.post('http://localhost:5000/api/', addUser);
       console.log(response);
-      // alert(await response.data.data.message);
+
       dispatch(showtoast({ message: response.data.data.message, type: "success" }));
     } catch (error) {
       dispatch(showtoast({ message: error.response?.data?.data?.message, type: "error" }))
@@ -44,20 +47,25 @@ const SignUp_llogin = () => {
     }
   }
   //#endregion
-  // const handleType = () => setPassType(!passType);
+
   //#region  send user credentials
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
 
       const response = await axios.post('http://localhost:5000/api/loginuser', addUser);
-      console.log(response);
+
       if (response.data.status) {
 
         localStorage.setItem('token', response.data.data.token);
-      dispatch(loginStatus(response.data.data.data));
+
+        dispatch(loginStatus(response.data.data.data));
+        if (response.data.data.data.usertype === 'admin') {
+          navigate('/admin');
+        }
+
+
         dispatch(showtoast({ message: response.data.data.message, type: "success" }))
-        
       }
       else {
         console.log('invalid credentials');
@@ -69,6 +77,7 @@ const SignUp_llogin = () => {
 
     }
   }
+
   //#endregion
 
   return (

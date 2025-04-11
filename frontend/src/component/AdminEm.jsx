@@ -57,13 +57,13 @@ const AdminEm = () => {
                   <Form.Control type="text" placeholder="Enter PhoneNumber" className=' text-black' />
                 </Form.Group>
 
-                {/* <Form.Group as={Col} controlId="formGridPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
-            </Form.Group> */}
-                <Form.Group as={Col} controlId="formGridEmail">
-                  <Form.Label style={{ 'color': 'var(--admin-header-color)' }}>DOB</Form.Label>
-                  <Form.Control type="date" placeholder='MM-DD-YY' className=' text-black' />
+
+                <Form.Group as={Col} controlId="formGridCategory">
+                  <Form.Label style={{ 'color': 'var(--admin-header-color)' }}>Category</Form.Label>
+                  <Form.Select defaultValue="choose...">
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                  </Form.Select>
                 </Form.Group>
               </Row>
 
